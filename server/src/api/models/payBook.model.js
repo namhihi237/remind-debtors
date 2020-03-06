@@ -9,18 +9,30 @@ const payBookSchema = new mongoose.Schema({
   content: {
     type: String
   },
-  debtorsId: {
-    // id nguoi no
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "user"
-  },
+  // debtorsId: {
+  //   // id nguoi no
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: true,
+  //   ref: "user"
+  // },
   money: {
     type: Number
   },
-  status: {
-    // done or not done
+  name: {
     type: String
+  },
+  email: {
+    type: String
+  },
+  phone: {
+    type: String
+  },
+  status: {
+    type: String
+  },
+  time: {
+    type: Date,
+    default: new Date()
   }
 });
 module.exports = mongoose.model("PayBook", payBookSchema, "paybook");

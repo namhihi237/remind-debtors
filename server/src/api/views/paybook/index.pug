@@ -1,0 +1,33 @@
+extends ../template
+block content
+    div(style='margin-top:40px')
+        h1 Lịch Sử Cho Cho Muon
+        a.btn.btn-primary(href='/paybook/create' role='button') Create
+        br
+        br
+        table#table-id.table.table-striped.table-bordered
+            thead
+                tr
+                    th Content
+                    th Money
+                    th Debtors Name
+                    th Status
+                    th Time
+                    th Sửa
+                    th &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  Xoá
+            tbody
+                each item in items
+                    tr
+                        td=item.content
+                        td=item.money
+                        td=item.name
+                        td=item.status
+                        td=`${item.time.getDate()}/${item.time.getMonth()}/${item.time.getFullYear()}--${item.time.getHours()}:${item.time.getMinutes()}`
+                        td
+                            a.btn.btn-info(href="/paybook/update/" + item._id) ...
+                        td
+                            a.btn.btn-danger.ml-5(href='/paybook/delete/'+item._id role='button') x
+    script.
+        $(document).ready(function() {
+            $('#table-id').DataTable( );
+        } );

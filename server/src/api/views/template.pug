@@ -1,0 +1,29 @@
+html
+    head
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        meta(http-equiv='X-UA-Compatible' content='ie=edge')
+        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" )
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+        script(src="https://code.jquery.com/jquery-3.3.1.js")
+        link(rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css')
+        script(type='text/javascript' charset='utf8' src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js')
+        script(src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js")
+    body
+        nav.navbar.navbar-expand-lg.navbar-light.bg-light(style='position: fixed; width:100%; z-index : 2')
+            a.navbar-brand(href='/') Remind Debtors
+            button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarText' aria-controls='navbarText' aria-expanded='false' aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            #navbarText.collapse.navbar-collapse
+                ul.navbar-nav.mr-auto
+                    li.nav-item.active
+                        a.nav-link(href='/home') Home
+                    //- li.nav-item
+                    //-     a.nav-link(href='/users') Users
+            if user
+                a(href='/home/user')= user.name
+                a.btn.btn-primary.ml-5(href='/auth/logout' role='button') LogOut
+        .container.pt-5
+            block content

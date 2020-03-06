@@ -1,0 +1,27 @@
+extends ../template
+block content
+    h2 Update 
+
+    form(action="/paybook/update/" +item._id method="POST")
+        .form-group
+            label(for='exampleFormControlInput1') Monney
+            input#exampleFormControlInput1.form-control(type='text' name="money"  value=item.money)
+        .form-group
+            label(for='exampleFormControlTextarea1') Content
+            textarea#exampleFormControlTextarea1.form-control(rows='3' name="content")=item.content
+
+        .form-group
+            label(for='exampleFormControlInput1') Tên Người Nợ
+            input#exampleFormControlInput1.form-control(type='text' name="name"  value=item.name)
+        .form-group
+            label(for='exampleFormControlInput1') Email
+            input#exampleFormControlInput1.form-control(type='email' name="email"  value=item.email)
+
+        .form-group
+            label(for='exampleFormControlInput1') Phone
+            input#exampleFormControlInput1.form-control(type='text' name="phone"  value=item.phone)
+        button.btn.btn-primary.mt-5.mr-5(type='submit') Save
+        button.btn.btn-primary.mt-5.ml-5.mr-5(type='reset') Reset
+        a.btn.btn-danger.ml-5.mt-5(href='/paybook') Cancel
+
+
