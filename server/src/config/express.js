@@ -2,11 +2,14 @@ require("./passport");
 const express = require("express");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
-const payBookRouter = require("../api/routes/payBook.route");
-const authRouter = require("../api/routes/auth.router");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const middleware = require("../api/middleware/auth.middleware");
+const payBookRouter = require("../api/routes/payBook.route");
+const authRouter = require("../api/routes/auth.router");
+const userRouter = require("../api/routes/user.roter");
+// const slackRouter = require("../api/routes/remind.router");
+const cron = require("./cron");
 const app = express();
 app.use(logger("dev"));
 app.use(bodyParser.json());
@@ -21,8 +24,11 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 app.use("/auth", authRouter);
+// app.use("/remind", slackRouter);
+app.use("/user", middleware.loggedIn, userRouter);
 app.use("/paybook", middleware.loggedIn, payBookRouter);
 app.use("/home", middleware.loggedIn, (req, res) => {
   res.send("logined");
 });
+cron();
 module.exports = app;

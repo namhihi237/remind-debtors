@@ -8,6 +8,10 @@ module.exports = {
       httpOnly: true,
       signed: true
     });
+    if (req.user.exist == 0) {
+      res.redirect("/user/infor");
+      return;
+    }
     res.redirect("/paybook");
   },
   logout: (req, res) => {

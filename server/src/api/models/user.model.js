@@ -11,9 +11,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  status: {
-    type: String,
-    default: "low"
+  exist: {
+    type: Number,
+    default: 0
+  },
+  phone: {
+    type: String
   }
 });
 module.exports = mongoose.model("User", userSchema, "user");

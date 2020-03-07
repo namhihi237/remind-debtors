@@ -1,0 +1,12 @@
+extends ./template
+block content
+    h2 Nhập thông tin người dùng 
+
+    form(action="/user/infor" method="POST")
+        .form-group
+            label(for='exampleFormControlInput1') Phone
+            input#exampleFormControlInput1.form-control(type='text' name="phone" placeholder='Nhập số điện thoại...' required)
+            span(id='mess')
+        button.btn.btn-primary.mt-5.mr-5(type='submit') Save
+        button.btn.btn-primary.mt-5.ml-5.mr-5(type='reset') Reset
+        a.btn.btn-danger.ml-5.mt-5(href='/paybook') Cancel

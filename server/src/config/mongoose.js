@@ -8,7 +8,8 @@ exports.connect = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URL, {
       useUnifiedTopology: true,
-      useNewUrlParser: true
+      useNewUrlParser: true,
+      useFindAndModify: false
     });
   } catch (error) {
     console.log(error);

@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const PayBook = require("../models/payBook.model");
-const mongoose = require("mongoose");
-const Debtors = require("../models/debtors.model");
+const bot = require("../../../src/config/slack");
+const stts = ["Done", "Not Done"];
 
 module.exports.getAll = async (req, res, next) => {
   const googleId = req.signedCookies.userId;
@@ -25,24 +25,34 @@ module.exports.postCreate = async (req, res, next) => {
   try {
     const user = await User.findOne({ googleId });
     const creditorsId = user._id;
-    const newItem = {
-      creditorsId,
-      ...req.body,
-      status: "Not Done"
-    };
-    await PayBook.create(newItem);
-    const { name, email, phone } = req.body;
-    const debtors = await Debtors.findOne({ email });
-    if (!debtors) {
-      const newDebtors = {
-        name,
+    const { email } = req.body;
+    const debtors = await User.findOne({ email });
+    if (debtors) {
+      const newItem = {
+        creditorsId,
+        ...req.body,
         email,
-        phone
+        phone: debtors.phone,
+        status: "Not Done"
       };
-      await Debtors.create(newDebtors);
+      await PayBook.create(newItem);
+      const nameSlack = email.split("@")[0];
+      bot.postMessageToUser(
+        nameSlack,
+        `Bạn cần phải trả số tiền ${req.body.money} cho ${user.name}`,
+        {
+          icon_emoji: ":dog:"
+        }
+      );
+      // job(1, nameSlack, req.body.money, user.name, item._id);
+      res.redirect("/paybook");
+      return;
+    } else {
+      res.render("paybook/create", {
+        mess: "Email người nợ không tồn tại trong hệ thống"
+      });
     }
     // res.json(newPayBook);
-    res.redirect("/paybook");
   } catch (error) {
     next(error);
   }
@@ -61,16 +71,32 @@ module.exports.update = async (req, res, next) => {
   const _id = req.params._id;
   try {
     const item = await PayBook.findById({ _id });
-    res.render("paybook/update", { item });
+    res.render("paybook/update", { item, stts });
   } catch (error) {
     next(error);
   }
 };
 module.exports.postUpdate = async (req, res, next) => {
-  const _id = req.body._id;
+  const _id = req.params._id;
+  const { content, name, email, money, status } = req.body;
   try {
-    await PayBook.findByIdAndUpdate({ _id }, req.body);
-    res.redirect("/paybook");
+    const user = await User.findOne({ email });
+    if (user) {
+      await PayBook.findOneAndUpdate(
+        { _id },
+        { status, money, content, email, name, phone: user.phone }
+      );
+      if (status === "Done") {
+      }
+      res.redirect("/paybook");
+    } else {
+      const item = await PayBook.findById({ _id });
+      res.render("paybook/update", {
+        item,
+        stts,
+        mess: "Email người nợ không tồn tại trong hệ thống"
+      });
+    }
   } catch (error) {
     next(error);
   }
