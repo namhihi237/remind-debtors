@@ -9,11 +9,10 @@ const client = new twilio(
 );
 const remind = function() {
   const job = new CronJob(
-    `*/1 * * * *`,
+    `*/2 * * * *`, // 2 p gui sms 1 lan
     async function() {
       try {
         const items = await PayBooks.find({ status: "Not Done" });
-        console.log(items);
         const promises = items.map(async item => {
           const creditorsId = item.creditorsId;
           const email = item.email;
@@ -21,12 +20,10 @@ const remind = function() {
           const nameSlack = email.split("@")[0];
           const money = item.money;
           const count = item.count + 1;
-          console.log(count);
           const phone = item.phone;
           const creditors = await Users.findById({ _id: creditorsId });
           const name = creditors.name;
-          if (item.count < 15) {
-            console.log("1");
+          if (item.count < 5) {
             bot.postMessageToUser(
               nameSlack,
               `Bạn cần phải trả số tiền ${money}  cho ${name}`,
@@ -35,7 +32,6 @@ const remind = function() {
               }
             );
           } else {
-            console.log("2");
             client.messages
               .create({
                 body: `Bạn cần phải trả số tiền ${money}  cho ${name}`,
@@ -44,13 +40,6 @@ const remind = function() {
               })
               .then(message => console.log(message.sid));
           }
-          //   bot.postMessageToUser(
-          //     nameSlack,
-          //     `Bạn cần phải trả số tiền ${money}  cho ${name}`,
-          //     {
-          //       icon_emoji: ":dog:"
-          //     }
-          //   );
           await PayBooks.findByIdAndUpdate({ _id }, { count });
         });
         await Promise.all(promises);
